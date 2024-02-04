@@ -140,3 +140,29 @@ def plot_history_regr(history:dict=None, model_name:str=None, plot_counter:int=N
         plot_counter = 1
         plt.suptitle(f"Fig.{plot_counter} - {model_name} model", y=-0.1, fontsize=14)  
     plt.tight_layout();
+    
+    
+def split_sequence(sequence:np.array, n_steps:int)->np.array:
+	""" Split a univariate sequence into samples
+
+	Args:
+		sequence (np.array): time series (1 feature)
+		n_steps (int): lag
+
+	Returns:
+		np.array: _description_
+	"""    
+	X, y = list(), list()
+ 
+	for i in range(len(sequence)):
+		# find the end of this pattern
+		end_ix = i + n_steps
+		# check if we are beyond the sequence
+		if end_ix > len(sequence)-1:
+			break
+		# gather input and output parts of the pattern
+		seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
+		X.append(seq_x)
+		y.append(seq_y)
+  
+	return np.array(X), np.array(y)
