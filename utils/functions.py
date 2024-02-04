@@ -97,3 +97,46 @@ def plot_acf_pacf(series: pd.Series, lags:int, fig_id:int=1, zero:bool=False)->N
     #plt.xticks(major_ticks)
     plt.suptitle("Fig.{} - Autocorrelation and partial autocorrelation".format(fig_id), y=-0.05)
     plt.show()
+
+
+
+def plot_history_regr(history:dict=None, model_name:str=None, plot_counter:int=None):
+    """Training history visualization
+    
+    Аргументы:
+    history (keras.callbacks.History) - Training history data,
+    model_name (str) - figure title. Use: model.name
+    plot_counter (int) - figure id.      
+    """
+    mse_train =  history.history['mse'] 
+    mse_val =  history.history['val_mse']  # validation sample
+        
+    train_loss =  history.history['loss']
+    val_loss =  history.history['val_loss']
+
+    epochs = range(len(mse_train))
+
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(11, 5))
+
+    ax[0].plot(epochs, train_loss, 'b', label='Train')
+    ax[0].plot(epochs, val_loss, 'r', label='Valid')
+    ax[0].set_xlabel('Epoch', size=11)
+    ax[0].set_ylabel('Loss', size=11)
+    ax[0].set_title('Loss')
+    ax[0].legend(['train', 'val'])
+
+    ax[1].plot(epochs, mse_train, 'b', label='Train')
+    ax[1].plot(epochs, mse_val, 'r', label='Valid')
+    ax[1].set_xlabel('Epoch', size=11)
+    ax[1].set_ylabel('MSE value', size=11)
+    ax[1].set_title(f"MSE")
+    ax[1].legend(['train', 'val'])
+
+    if plot_counter is not None:
+        plt.suptitle(f"Fig.{plot_counter} - {model_name} model", y=0.05, fontsize=14)
+        #plt.savefig(config.PATH_FIGURES + f'fig_{plot_counter}.png')
+    
+    else: 
+        plot_counter = 1
+        plt.suptitle(f"Fig.{plot_counter} - {model_name} model", y=-0.1, fontsize=14)  
+    plt.tight_layout();
