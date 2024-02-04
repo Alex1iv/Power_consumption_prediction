@@ -7,8 +7,16 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.arima.model import ARIMA
 import statsmodels.graphics.tsaplots as sgt
 import matplotlib.pyplot as plt
-
+from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
  
+from utils.config_reader import config_reader
+
+#set path
+import sys
+sys.path.insert(1, '../')
+
+# Import parameters
+config = config_reader('../config/config.json')
 
 def Dickey_Fuller_test(data:pd.Series): #
     """Augmented Dickey-Fuller unit root test on stationarity of series
@@ -166,3 +174,46 @@ def split_sequence(sequence:np.array, n_steps:int)->np.array:
 		y.append(seq_y)
   
 	return np.array(X), np.array(y)
+
+def callbacks(lr:float, model_name:str):
+    """Функция управления этапами обучения модели
+
+    Args:
+        min_lr (_float_): нижняя граница learning rate, по которой обучение прекращается
+        num_train (_int_): номер пилота
+        monitor (str) - значение метрики 
+        mode (str)- режим работы функции {"auto", "min", "max"}. Max - остановка обучения, когда метрика не увеличивается; 
+        reduce_patience (_int_): количество эпох, после которого learning rate снижается в случае, если метрика не улучшается.
+        stop_patience (_int_):  количество эпох, после которого обучение останавливается, если метрика не улучшается.
+        path_models (_str_): путь сохранения лучшей модели (из конфига).
+        save_best_only (bool): Если True, то сохраняет только модели с лучшим скором.
+    """      
+    
+    # сохранение лучшей модели
+    checkpoint = ModelCheckpoint(
+        os.path.join(config.path_models, model_name + '.hdf5'), 
+        monitor=config.monitor, 
+        verbose=1, 
+        mode=config.mode, 
+        save_best_only=True
+    )
+
+    # остановка обучения при отсутствии улучшения заданной метрики
+    earlystop = EarlyStopping(
+        monitor=config.monitor, 
+        mode=config.mode, 
+        patience=config.stop_patience, 
+        restore_best_weights=config.restore_best_weights
+    )
+
+    # снижение learning rate при отсутствии улучшения заданной метрики 
+    reduce_lr = ReduceLROnPlateau(
+        monitor=config.monitor, 
+        mode=config.mode,  
+        factor=0.5, 
+        patience=config.reduce_patience,  # можно 10
+        verbose=1, 
+        min_lr=lr/1000
+    )
+    
+    return [checkpoint, earlystop, reduce_lr]
