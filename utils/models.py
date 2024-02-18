@@ -23,14 +23,14 @@ class ModelLSTM(Model):
         # -------- слои модели ----------------
         self.input_channels = x = tf.keras.layers.Input(shape=(self.n_timesteps, self.n_channels))# #shape=(self.n_timesteps, self.n_channels)
       
-        x = tf.keras.layers.LSTM(units=28, return_sequences=True)(x)
-        x = tf.keras.layers.LSTM(units=14, return_sequences=True, dropout=0.5)(x) #
+        x = tf.keras.layers.LSTM(units=50, return_sequences=True, activation = 'relu')(x) #
+        x = tf.keras.layers.LSTM(units=14)(x) #, return_sequences=True, dropout=0.5
         #x = tf.keras.layers.LSTM(units=7)(x) #, dropout=0.5
         #x = tf.keras.layers.Dense(1, activation='relu')(x)
         #x = tf.keras.layers.BatchNormalization()(x)
         #x = tf.keras.layers.Dropout(0.5)(x)
 
-        self.output_channels = tf.keras.layers.Dense(units=1, activation='relu')(x)
+        self.output_channels = tf.keras.layers.Dense(units=1)(x)
         
         print(f"input_shape = {(self.n_timesteps, self.n_channels)} | output_units = {self.output_channels}")
 
