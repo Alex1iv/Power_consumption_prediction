@@ -3,7 +3,9 @@ from keras.models import Model
 import tensorflow as tf
 # from keras.models import Sequential
 # from keras.layers import LSTM, Dense
-
+from utils.config_reader import config_reader
+# Import parameters
+config = config_reader('../config/config.json')
 
 class ModelLSTM(Model):
     """Класс создаёт модель LSTM, наследуя класс от tf.keras.
@@ -23,8 +25,8 @@ class ModelLSTM(Model):
         # -------- слои модели ----------------
         self.input_channels = x = tf.keras.layers.Input(shape=(self.n_timesteps, self.n_channels))# #shape=(self.n_timesteps, self.n_channels)
       
-        x = tf.keras.layers.LSTM(units=50, return_sequences=True, activation = 'relu')(x) #
-        x = tf.keras.layers.LSTM(units=14)(x) #, return_sequences=True, dropout=0.5
+        x = tf.keras.layers.LSTM(units=256, return_sequences=True, activation = 'relu')(x) #
+        x = tf.keras.layers.LSTM(units=32)(x) #, return_sequences=True, dropout=0.5
         #x = tf.keras.layers.LSTM(units=7)(x) #, dropout=0.5
         #x = tf.keras.layers.Dense(1, activation='relu')(x)
         #x = tf.keras.layers.BatchNormalization()(x)
@@ -47,7 +49,7 @@ class ModelLSTM(Model):
         #--------------
         # compile model
         #--------------
-        optimizer = tf.keras.optimizers.Adam(learning_rate = 0.001)
+        optimizer = tf.keras.optimizers.Adam(learning_rate = config.model.learning_rate)
         model.compile(loss = 'mse', metrics = ['mae', 'mse'], optimizer = optimizer)
 
         return model
