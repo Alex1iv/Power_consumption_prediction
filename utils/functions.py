@@ -175,7 +175,7 @@ def split_sequence(sequence:np.array, n_steps:int)->np.array:
   
 	return np.array(X), np.array(y)
 
-def callbacks(lr:float, model_name:str):
+def callbacks(model_name:str, lr:float=config.model.learning_rate, save_model:bool=True):
     """Функция управления этапами обучения модели
 
     Args:
@@ -195,7 +195,7 @@ def callbacks(lr:float, model_name:str):
         monitor=config.monitor, 
         verbose=1, 
         mode=config.mode, 
-        save_best_only=True
+        save_best_only=save_model
     )
 
     # остановка обучения при отсутствии улучшения заданной метрики
