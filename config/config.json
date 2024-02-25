@@ -8,15 +8,15 @@
     "path_figures": "../figures/",
 
     "//": "Функция Callbacks",
-    "reduce_patience":15,
-    "stop_patience":200,
+    "reduce_patience":10,
+    "stop_patience":150,
     "monitor":"mse",
     "verbose":1,
     "mode":"max",
     "save_best_only": true,
     "restore_best_weights": true,
     "factor": 0.9,
-    "min_lr_coeff":0.0001,
+    "min_lr_coeff":1e-4,
 
     "//": "Time series split",
     "n_steps":7,

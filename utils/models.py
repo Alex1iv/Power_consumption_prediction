@@ -10,21 +10,19 @@ from utils.config_reader import config_reader
 config = config_reader('../config/config.json')
 
 class ModelLSTM(Model):
-    """Класс создаёт модель LSTM, наследуя класс от tf.keras.
+    """ Model inherits the LSTM class from Keras.
     Параметры:
     ----------
-    n_timesteps (_int_) - кол-во временных периодов
-    n_channels (_int_) - кол-во датчиков
-    output_units - конечный слой модели
-    lstm_units - размерность модели из конфига
+    Model - data
+   
     """
     def __init__(self, data):
     
         super().__init__()
-        # ------- параметры ------------
+        # ------- Parameters ------------
         _, self.n_timesteps, self.n_channels = data.shape
         
-        # -------- слои модели ----------------
+        # -------- Model layers ----------------
         self.input_channels = x = tf.keras.layers.Input(shape=(self.n_timesteps, self.n_channels)) 
       
         x = tf.keras.layers.LSTM(units=256, return_sequences=True, activation = 'relu')(x) #
@@ -59,8 +57,8 @@ class ModelLSTM(Model):
 
     
 class linear_model(Model):
-    """Класс создаёт модель LSTM, наследуя класс от tf.keras.
-    Параметры:
+    """Linear mode class
+    Params:
     ----------
     n_timesteps (_int_) - кол-во временных периодов
     n_channels (_int_) - кол-во датчиков
@@ -70,10 +68,10 @@ class linear_model(Model):
     def __init__(self, data):
     
         super().__init__()
-        # ------- параметры ------------
+        # ------- Parameters ------------
         _, self.n_timesteps, self.n_channels = data.shape
         
-        # -------- слои модели ----------------
+        # -------- Model layers ----------------
         self.input_channels = x = tf.keras.layers.Input(shape=(self.n_timesteps, self.n_channels))
       
         x = Dense(units=256,  activation = 'relu')(x)
