@@ -142,7 +142,7 @@ def plot_history_regr(history:dict=None, model_name:str=None, plot_counter:int=N
 
     if plot_counter is not None:
         plt.suptitle(f"Fig.{plot_counter} - {model_name} model", y=0.05, fontsize=14)
-        #plt.savefig(config.PATH_FIGURES + f'fig_{plot_counter}.png')
+        plt.savefig(config.path_figures + f'fig_{plot_counter}.png')
     
     else: 
         plot_counter = 1
@@ -176,29 +176,28 @@ def split_sequence(sequence:np.array, n_steps:int)->np.array:
 	return np.array(X), np.array(y)
 
 def callbacks(model_name:str, lr:float=config.model.learning_rate, save_model:bool=True):
-    """Функция управления этапами обучения модели
+    """Model training setup function
 
     Args:
-        min_lr (_float_): нижняя граница learning rate, по которой обучение прекращается
-        num_train (_int_): номер пилота
-        monitor (str) - значение метрики 
-        mode (str)- режим работы функции {"auto", "min", "max"}. Max - остановка обучения, когда метрика не увеличивается; 
-        reduce_patience (_int_): количество эпох, после которого learning rate снижается в случае, если метрика не улучшается.
-        stop_patience (_int_):  количество эпох, после которого обучение останавливается, если метрика не улучшается.
-        path_models (_str_): путь сохранения лучшей модели (из конфига).
-        save_best_only (bool): Если True, то сохраняет только модели с лучшим скором.
+        min_lr (_float_): lower boundary of the learning rate to stop training
+        monitor (str) - metric name 
+        mode (str)- modes {"auto", "min", "max"}. Max - stop training if the metric doesn't improve
+        reduce_patience (_int_): number of epochs to evaluate the learning rate improvement
+        stop_patience (_int_):  number of epochs before training will be ended
+        path_models (_str_): path to save the model
+        save_best_only (bool): If True then saves the model with the best metric.
     """      
     
-    # сохранение лучшей модели
+    # Save the best model
     checkpoint = ModelCheckpoint(
         os.path.join(config.path_models, model_name + '.hdf5'), 
         monitor=config.monitor, 
-        verbose=1, 
+        verbose=config.verbose, 
         mode=config.mode, 
         save_best_only=save_model
     )
 
-    # остановка обучения при отсутствии улучшения заданной метрики
+    # stop training if the metric doesn't improve
     earlystop = EarlyStopping(
         monitor=config.monitor, 
         mode=config.mode, 
@@ -206,13 +205,13 @@ def callbacks(model_name:str, lr:float=config.model.learning_rate, save_model:bo
         restore_best_weights=config.restore_best_weights
     )
 
-    # снижение learning rate при отсутствии улучшения заданной метрики 
+    # reduce the learning rate if the metric doesn't improve
     reduce_lr = ReduceLROnPlateau(
         monitor=config.monitor, 
         mode=config.mode,  
-        factor=0.5, 
-        patience=config.reduce_patience,  # можно 10
-        verbose=1, 
+        factor=config.factor, 
+        patience=config.reduce_patience,  # might be 10
+        verbose=config.verbose, 
         min_lr=lr/1000
     )
     
