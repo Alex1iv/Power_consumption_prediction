@@ -26,7 +26,7 @@ class ModelLSTM(Model):
         self.input_channels = x = tf.keras.layers.Input(shape=(self.n_timesteps, self.n_channels)) 
       
         x = tf.keras.layers.LSTM(units=256, return_sequences=True, activation = 'relu')(x) #
-        x = tf.keras.layers.LSTM(units=32)(x) #, return_sequences=True, dropout=0.5
+        x = tf.keras.layers.LSTM(units=64)(x) #, return_sequences=True, dropout=0.5
         #x = tf.keras.layers.LSTM(units=7)(x) #, dropout=0.5
         #x = tf.keras.layers.Dense(1, activation='relu')(x)
         #x = tf.keras.layers.BatchNormalization()(x)
