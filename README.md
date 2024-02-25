@@ -31,12 +31,24 @@ The power consumption has several remarkable periods of change: weekly and month
 
 The renewable energy generation datataset in Germany between the years 2006–2017 was acquired form [the Open Power System Data (OPSD)](https://open-power-system-data.org/) storage; it was partly described in a [popular tutorial](https://www.dataquest.io/blog/tutorial-time-series-analysis-with-pandas). To increase the accuracy of prediction, the energy consumprion vector (N=4383) was transformed to a two-dimensional array of a shape 4383 rows by 7 columns. Each row represents daily consumption of the electricity plus that in the next 6 days. The goal is to predict the consumption beyond the given timeframe. 
 
+The data was split by 3 samples without shuffling data entries: Train, validation, and test. The last set contained 100 values.
+
 ## ML model
 
+Based on author's experience, the model has following architecture: 256 hidden layers of the Long-Short Term Memory (LSTM) with the linear activation function. 
+
+<div align="center"> <img src="./figures/neural network architecture.png" width="300"> </div>
+
+After 75 epochs, the model satisfactory predicts consumption with the mean squared error reached 4220 (fig.4).
+
+<div align="center"> <img src="./figures/fig_4.png" width="900"> </div>
 
 
 ## Results
 
+Although the model 
+
+<div align="center"> <img src="./figures/fig_5.png" width="900"> </div>
 
 ## Project structure
 
