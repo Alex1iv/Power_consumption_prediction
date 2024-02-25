@@ -39,14 +39,14 @@ Based on author's experience, the model has following architecture: 256 hidden l
 
 <div align="center"> <img src="./figures/neural network architecture.png" width="300"> </div>
 
-After 75 epochs, the model satisfactory predicts consumption with the mean squared error reached 4220 (fig.4).
+After 70 epochs the model didn't overfit (fig.4).
 
 <div align="center"> <img src="./figures/fig_4.png" width="900"> </div>
 
 
 ## Results
 
-Although the model 
+Although the model satisfactory predicts the consumption, its mean squared error is quite high and reaches some 14100 on the test sample. This happened because of small dataset size.
 
 <div align="center"> <img src="./figures/fig_5.png" width="900"> </div>
 
