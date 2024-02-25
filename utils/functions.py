@@ -142,7 +142,7 @@ def plot_history_regr(history:dict=None, model_name:str=None, plot_counter:int=N
 
     if plot_counter is not None:
         plt.suptitle(f"Fig.{plot_counter} - {model_name} model", y=0.05, fontsize=14)
-        plt.savefig(config.path_figures + f'fig_{plot_counter}.png')
+        plt.savefig(os.path.join(config.path_figures + f'fig_{plot_counter}.png'))
     
     else: 
         plot_counter = 1
