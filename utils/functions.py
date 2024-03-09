@@ -175,7 +175,9 @@ def split_sequence(sequence:np.array, n_steps:int)->np.array:
   
 	return np.array(X), np.array(y)
 
-def callbacks(model_name:str, lr:float=config.model.learning_rate, save_model:bool=True):
+def callbacks(#path, 
+    model_name:str=None,
+    lr:float=config.model.learning_rate):
     """Model training setup function
 
     Args:
@@ -189,13 +191,23 @@ def callbacks(model_name:str, lr:float=config.model.learning_rate, save_model:bo
     """      
     
     # Save the best model
-    checkpoint = ModelCheckpoint(
-        os.path.join(config.path_models, model_name + '.hdf5'), 
-        monitor=config.monitor, 
-        verbose=config.verbose, 
-        mode=config.mode, 
-        save_best_only=save_model
-    )
+    # checkpoint = ModelCheckpoint(
+    #     filepath=os.path.join(config.path_models + model_name + '.hdf5'), 
+    #     #filepath=path,
+    #     monitor=config.monitor, 
+    #     verbose=config.verbose, 
+    #     mode=config.mode, 
+    #     save_best_only=True, 
+    #     #save_weights_only=True
+    # )
+    # checkpoint = ModelCheckpoint(
+    #     filepath= '../models/model_LSTM.hdf5', #os.path.join(config.PATH_MODEL + model_name +'.hdf5'), 
+    #     monitor=config.monitor, 
+    #     verbose=1, 
+    #     mode=config.mode, 
+    #     save_best_only=True
+    # )
+
 
     # stop training if the metric doesn't improve
     earlystop = EarlyStopping(
@@ -215,4 +227,5 @@ def callbacks(model_name:str, lr:float=config.model.learning_rate, save_model:bo
         min_lr=lr/1000
     )
     
-    return [checkpoint, earlystop, reduce_lr]
+    return [#checkpoint, 
+            earlystop, reduce_lr]
